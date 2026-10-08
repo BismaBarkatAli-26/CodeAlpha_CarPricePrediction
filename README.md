@@ -25,14 +25,14 @@ CodeAlpha_CarPricePrediction/
 ├── Car_Price_Prediction.ipynb
 ├── requirements.txt
 ├── README.md
-├── data/      # put car data.csv here
+├── data/      # car data.csv
 ├── images/    # charts saved by the notebook
-└── models/    # car_price_model.joblib (created when you run the notebook)
+└── models/    # car_price_model.joblib (trained model)
 ```
 
 ## How to run
 1. Download `car data.csv` from Kaggle.
-2. **Colab:** upload notebook + CSV, Runtime → Run all.
+2. **Colab:** upload the notebook (File → Upload notebook), upload the CSV using the 📁 folder icon, then Runtime → Run all.
    **Local:** `pip install -r requirements.txt`, copy the CSV into `data/`, run `jupyter notebook Car_Price_Prediction.ipynb`.
 
 ## Methodology
@@ -46,26 +46,30 @@ CodeAlpha_CarPricePrediction/
 8. Permutation importance + linear coefficients; save model; prediction function
 
 ## Results
+5-fold cross-validation on the training set:
 
 | Model | CV R² | CV RMSE |
 |---|---|---|
-| Linear Regression |0.8850|1.6451|
-| Ridge Regression |0.8858|1.6384|
-| Decision Tree |0.7419|2.1300|
-| Random Forest |0.8930|1.5099|
-| Gradient Boosting |0.8783|1.6237|
+| Random Forest | 0.8930 | 1.5099 |
+| Ridge Regression | 0.8858 | 1.6384 |
+| Linear Regression | 0.8850 | 1.6451 |
+| Gradient Boosting | 0.8783 | 1.6237 |
+| Decision Tree | 0.7419 | 2.1300 |
 
-**Best model:** `Random Forest` — Test MAE `1.4968`, MSE `12.8684`, RMSE `3.5873`, R² `0.5007` (6.11 lakhs ₹)
+**Best model (selected by cross-validation):** Random Forest — Test MAE 1.4968, MSE 12.8684, RMSE 3.5873, R² 0.5007 (prices in lakhs ₹)
+
+**Note on the CV vs test gap:** cross-validated R² was 0.893, but test R² was 0.501. RMSE being much larger than MAE indicates that most predictions were close, while a few cars — likely the most expensive ones — had very large errors. Random Forest cannot predict above the price range seen in training, and with only ~60 test cars, a single large error strongly lowers R².
 
 Screenshots: `images/05_model_comparison.png`, `images/06_actual_vs_predicted.png`, `images/08_feature_importance.png`
 
 ## Limitations
-- Small dataset; a few expensive cars strongly affect RMSE
+- Small dataset; a few expensive cars strongly affect RMSE and R²
+- Test R² (0.50) is much lower than cross-validated R² (0.89), mainly due to a few high-priced cars the model cannot predict well
 - Missing features (horsepower, engine, condition, location, brand)
 - Asking prices from one website/time period
 
 ## Future improvements
-Log-transform the target, `GridSearchCV` tuning, use `Car details v3.csv` (same Kaggle dataset) for engine/power/mileage features, Streamlit deployment.
+Log-transform the target to reduce the effect of expensive cars, `GridSearchCV` tuning, use `Car details v3.csv` (same Kaggle dataset) for engine/power/mileage features, Streamlit deployment.
 
 ## Author
-Bisma Barkat Ali — Data Science Intern
+Bisma Barkat Ali — Data Science Intern, CodeAlpha
