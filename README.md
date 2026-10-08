@@ -25,7 +25,7 @@ CodeAlpha_CarPricePrediction/
 ├── Car_Price_Prediction.ipynb
 ├── requirements.txt
 ├── README.md
-├── data/      # car data.csv
+├── car data.csv
 ├── images/    # charts saved by the notebook
 └── models/    # car_price_model.joblib (trained model)
 ```
